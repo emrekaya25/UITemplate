@@ -1,0 +1,131 @@
+﻿@using UITemplate.UI.Areas.Admin.Models
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container text-center">
+    <div class="row">
+        <div class="col">
+            <div class="container text-center">
+                <div class="row">
+
+                    <div class="col-6">
+                        <div class="col-lg-3">
+                            <!-- small box -->
+                            <div class="small-box bg-success" style="min-width:245px;">
+                                <div class="inner">
+                                    <h3>0</h3>
+
+                                    <p>Onaylanan İstekler</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <a href="/Requests" class="small-box-footer">Daha fazla bilgi <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <!-- small box -->
+                            <div class="small-box bg-orange" style="min-width:245px;">
+                                <div class="inner">
+                                    <h3>25</h3>
+
+                                    <p>Bekleyen İstekler</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa-regular fa-hand-point-up"></i>
+                                </div>
+                                <a href="/Requests  " class="small-box-footer">Daha fazla bilgi <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-6">
+
+                            <div class="col-lg-3">
+
+                                <!-- small box -->
+                                <div class="small-box bg-info" style="min-width:245px;">
+                                    <div class="inner">
+                                        <h3>10</h3>
+                                        <p>Ürün Çeşit Sayısı</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa-solid fa-basket-shopping"></i>
+                                    </div>
+                                    <a href="/Products" class="small-box-footer">Daha fazla bilgi <i class="fas fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <!-- small box -->
+                                <div class="small-box bg-lime" style="min-width:245px;">
+                                    <div class="inner">
+                                        <h3>5</h3>
+                                        <p>Stoktaki Toplam Ürün Sayısı</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa-solid fa-database"></i>
+                                    </div>
+                                    <a href="/Stocks" class="small-box-footer">Daha fazla bilgi <i class="fas fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                        
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+        </div>
+@*         <div class="col">
+            <div class="card card-widget widget-user" style="min-height:305px">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header text-white" style="background:seagreen">
+                    <h3 class="widget-user-username text-left" style="text-transform:uppercase;">@Accessor.HttpContext.Session.GetString("Name")</h3>
+                    <h3 class="widget-user-desc text-right">@Accessor.HttpContext.Session.GetString("Company")</h3>
+                    <h5 class="widget-user-username text-right">@Accessor.HttpContext.Session.GetString("Department")</h5>
+                </div>
+
+                <div class="widget-user-image">
+                    <img class="img-circle" src="data:image/jpeg;base64,@Accessor.HttpContext.Session.GetString("UserImage")" alt="User Avatar">
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-sm-6 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">Rol/Roller: </h5>
+                                <span class="description-text">
+                                    @foreach (var item in SessionRole.Roles)
+                                    {
+                                        <span class="description-text">@item</span>
+                                    }
+                                </span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-6 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">Email: </h5>
+                                <span>@Accessor.HttpContext.Session.GetString("Email")</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+        </div> *@
+
+    </div>
+</div>
+

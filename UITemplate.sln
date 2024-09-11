@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UITemplate.UI", "UITemplate.UI\UITemplate.UI.csproj", "{3C65CA10-D780-49F5-BE07-A778AEC070F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UITemplate.Model", "UITemplate.Model\UITemplate.Model.csproj", "{0F22506F-BD79-46DF-AACF-E4A9C0067C2E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C65CA10-D780-49F5-BE07-A778AEC070F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C65CA10-D780-49F5-BE07-A778AEC070F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C65CA10-D780-49F5-BE07-A778AEC070F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C65CA10-D780-49F5-BE07-A778AEC070F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F22506F-BD79-46DF-AACF-E4A9C0067C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F22506F-BD79-46DF-AACF-E4A9C0067C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F22506F-BD79-46DF-AACF-E4A9C0067C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F22506F-BD79-46DF-AACF-E4A9C0067C2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6E48115A-0D5A-47BB-9C42-B141F5B6D5CF}
+	EndGlobalSection
+EndGlobal
