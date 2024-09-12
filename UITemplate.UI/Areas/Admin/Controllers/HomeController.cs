@@ -29,8 +29,8 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 
 			HomeViewModel homeViewModel = new HomeViewModel()
 			{
-				Users = users,
-				Roles = roles
+				Users = users.Data,
+				Roles = roles.Data
 			};
 
 			return View(homeViewModel);

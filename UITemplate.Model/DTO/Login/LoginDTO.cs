@@ -14,7 +14,8 @@ namespace UITemplate.Model.DTO.Login
         public string LastName { get; set; } = "string";
         public string Email { get; set; } = "string";
         public string Password { get; set; } = "string";
-        public List<UserRoleDTO> Roles { get; set; } = new();
+		public string Image { get; set; } = "string";
+		public List<UserRoleDTO> Roles { get; set; } = new();
         public string Token { get; set; } = "string";
     }
 }

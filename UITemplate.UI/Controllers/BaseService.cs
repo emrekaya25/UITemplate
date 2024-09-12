@@ -36,7 +36,7 @@ namespace UITemplate.UI.Services
 			return request;
 		}
 
-		public async Task<TEntity> PostAsync(string urlTag, TEntity entity,bool includeToken = true)
+		public async Task<ApiResponse<TEntity>> PostAsync(string urlTag, TEntity entity,bool includeToken = true)
 		{
 			var client = new RestClient();
 			var request = CreateRequest(urlTag, entity,includeToken);
@@ -50,10 +50,10 @@ namespace UITemplate.UI.Services
 
 			var responseObject = JsonConvert.DeserializeObject<ApiResponse<TEntity>>(response.Content);
 
-			return responseObject.Data;
+			return responseObject;
 		}
 
-		public async Task<List<TEntity>> PostAsyncList(string urlTag, TEntity entity,bool includeToken = true)
+		public async Task<ApiResponse<List<TEntity>>> PostAsyncList(string urlTag, TEntity entity,bool includeToken = true)
 		{
 			var client = new RestClient();
 			var request = CreateRequest(urlTag, entity,includeToken);
@@ -69,7 +69,7 @@ namespace UITemplate.UI.Services
 			var responseObject = JsonConvert.DeserializeObject<ApiResponse<List<TEntity>>>(response.Content);
 
 
-			return responseObject.Data;
+			return responseObject;
 		}
 
 	}

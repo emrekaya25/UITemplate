@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
 using UITemplate.Model.DTO.Login;
+using UITemplate.Model.DTO.UserRole;
 using UITemplate.Model.Result;
 using UITemplate.UI.Services;
 
@@ -42,10 +43,11 @@ namespace UITemplate.UI.Areas.Admin.Controllers
             {
                 HttpContext.Session.SetString("Id",responseObject.Data.Id.ToString());
                 HttpContext.Session.SetString("Token", responseObject.Data.Token);
-                HttpContext.Session.SetString("Name", responseObject.Data.Name + responseObject.Data.LastName);
+                HttpContext.Session.SetString("Name", responseObject.Data.Name + " " + responseObject.Data.LastName);
                 HttpContext.Session.SetString("Email",responseObject.Data.Email);
                 HttpContext.Session.SetString("Roles", JsonConvert.SerializeObject(responseObject.Data.Roles));
-                // var roleNames = JsonConvert.DeserializeObject<List<string>>(HttpContext.Session.GetString("Roles"));
+
+                //var roleNames = JsonConvert.DeserializeObject<List<UserRoleDTO>>(HttpContext.Session.GetString("Roles"));
 
                 return RedirectToAction("Index", "Home");
             }

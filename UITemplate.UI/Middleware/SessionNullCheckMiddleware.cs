@@ -19,14 +19,14 @@ namespace UITemplate.UI.Middleware
 			var path = httpContext.Request.Path.Value;
 			var protectedPaths = new List<string>
 		{
-			"/Requests", "/Companies", "/Anasayfa", "/Invoices", "/Offers", "/Products", "/Rapor", "/Stocks", "/Users"
+			"/Anasayfa", "/Users"
 		};
 
 			if (protectedPaths.Any(p => path.Contains(p)))
 			{
 				if (httpContext.Session.GetString("UserId") == null)
 				{
-					httpContext.Response.Redirect("/Login");
+					httpContext.Response.Redirect("/admin/login");
 					return;
 				}
 			}
