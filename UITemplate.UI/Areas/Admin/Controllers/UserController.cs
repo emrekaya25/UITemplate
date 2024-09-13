@@ -41,11 +41,23 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 			return View(userViewModel);
 		}
 
-		[HttpGet("/admin/user")]
+		[HttpPost("/admin/user")]
 		public async Task<IActionResult> GetUser(UserDTO userDTO)
 		{
 			var user = await _userService.PostAsync("GetUser",userDTO,true);
-			return View(user.Data);
+			RoleDTO roleDTO = new RoleDTO();
+			var roles = await _roleService.PostAsyncList("GetAllRoles",roleDTO,true);
+			UserRoleDTO userRoleDTO = new UserRoleDTO();
+			userRoleDTO.UserId = user.Data.Id;
+			var userRoles = await _userRoleService.PostAsyncList("GetAllUserRoles",userRoleDTO,true);
+
+			UserViewModel userViewModel = new UserViewModel()
+			{
+				User = user.Data,
+				Roles = roles.Data,
+				UserRoles = userRoles.Data
+			};
+			return View(userViewModel);
 		}
 
 		[HttpPost("/admin/addUser")]
@@ -70,23 +82,63 @@ namespace UITemplate.UI.Areas.Admin.Controllers
             var responseObject = await _userService.PostAsync("AddUser",userDTO,true);
 			if (responseObject.Data == null)
 			{
-                TempData["AddUserError"] = $"{responseObject.Message}";
+                TempData["userResponseError"] = $"{responseObject.Message}";
                
+			}
+			else
+			{
+				TempData["userResponseSuccess"] = $"{responseObject.Message}";
 			}
 			return RedirectToAction("Index", "User");
 
         }
 
 		[HttpPost("/admin/deleteUser")]
-		public async Task DeleteUser(UserDTO userDTO)
+		public async Task<IActionResult> DeleteUser(UserDTO userDTO)
 		{
-			await _userService.PostAsync("DeleteUser",userDTO,true);
+			var responseObject = await _userService.PostAsync("DeleteUser",userDTO,true);
+            if (responseObject.Data == null)
+            {
+                TempData["userResponseError"] = $"{responseObject.Message}";
+
+            }
+            else
+            {
+                TempData["userResponseSuccess"] = $"{responseObject.Message}";
+            }
+            return RedirectToAction("Index","User");
 		}
 
 		[HttpPost("/admin/updateUser")]
-		public async Task UpdateUser(UserDTO userDTO)
+		public async Task<IActionResult> UpdateUser(UserDTO userDTO, int[] userRoles, IFormFile Image)
 		{
-			await _userService.PostAsync("UpdateUser",userDTO,true);
+            userDTO.UserRoles = userRoles.Select(roleId => new UserRoleDTO { RoleId = roleId }).ToList();
+
+            //Fotoğrafı base64 şekline çevirme
+            string base64String = null;
+
+            if (Image != null && Image.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await Image.CopyToAsync(memoryStream);
+                    byte[] fileBytes = memoryStream.ToArray();
+                    base64String = Convert.ToBase64String(fileBytes);
+                }
+                userDTO.Image = base64String;
+            }
+
+            var responseObject = await _userService.PostAsync("UpdateUser",userDTO,true);
+            if (responseObject.Data == null)
+            {
+                TempData["userResponseError"] = $"{responseObject.Message}";
+
+            }
+            else
+            {
+                TempData["userResponseSuccess"] = $"{responseObject.Message}";
+            }
+            return RedirectToAction("Index","User");
 		}
 
 		

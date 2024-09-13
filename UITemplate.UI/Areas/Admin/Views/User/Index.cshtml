@@ -67,11 +67,24 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card-footer">
-                                            <div class="text-right">
-                                                <a href="#" class="btn btn-sm btn-primary">
-                                                    <i class="fas fa-user"></i> İncele
-                                                </a>
+                                        <div class="card-footer text-right">
+                                            <div class="d-inline-block">
+                                                @using (Html.BeginForm("GetUser","User",FormMethod.Post, new {id = "getUserForm", enctype = "multipart/form-data" }))
+                                                {
+                                                    <button type="submit" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-user"></i> İncele
+                                                        <input hidden="hidden" name="Id" value="@user.Id" />
+                                                    </button>
+                                                }
+                                            </div>
+                                            <div class="d-inline-block">
+                                                @using (Html.BeginForm("DeleteUser", "User", FormMethod.Post, new { id = "deleteUserForm", enctype = "multipart/form-data" }))
+                                                {
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i> Sil
+                                                        <input hidden="hidden" name="Id" value="@user.Id" />
+                                                    </button>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -168,12 +181,21 @@
 
                         <div class="form-group">
                             <label for="txtUserRoles_Add">Roller</label>
-                            <select name="UserRoles[]" id="txtUserRoles_Add" class="form-control" multiple>
+                            <div id="txtUserRoles_Add" class="row">
                                 @foreach (var role in Model.Roles)
                                 {
-                                    <option value="@role.Id">@role.Name</option>
+                                    <div class="col-md-4 col-sm-6">
+                                        <div class="role-checkbox" style="border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease; padding: 5px; margin-bottom: 10px;">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="UserRoles[]" value="@role.Id" id="role_@role.Id" style="cursor: pointer;" onchange="this.parentElement.parentElement.style.backgroundColor = this.checked ? '#e0f7ff' : '#f9f9f9';">
+                                                <label class="form-check-label" for="role_@role.Id" style="margin-left: 10px;">
+                                                    @role.Name
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 }
-                            </select>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -192,6 +214,39 @@
     <!-- /.modal-dialog -->
 </div>
 
+
+<!-- Error,Success Messages -->
+
+@functions {
+    string DecodeHtmlCharacters(string htmlEncodedString)
+    {
+        return System.Net.WebUtility.HtmlDecode(htmlEncodedString);
+    }
+}
+@if (TempData["userResponseSuccess"] != null)
+{
+    var x = TempData["userResponseSuccess"].ToString();
+    <script>
+        Swal.fire({
+            title: "Başarılı!",
+            html: "@Html.Raw(DecodeHtmlCharacters(x.Replace("-", "</br>")))",
+            icon: "success"
+        });
+    </script>
+}
+@if (TempData["userResponseError"] != null)
+{
+    var x = TempData["userResponseError"].ToString();
+    <script>
+        Swal.fire({
+            title: "Hata!",
+            html: "@Html.Raw(DecodeHtmlCharacters(x.Replace("-", "</br>")))",
+            icon: "error"
+        });
+    </script>
+}
+
+<!-- Error,Success Messages -->
 
 
 <script>
