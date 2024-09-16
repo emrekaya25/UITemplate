@@ -30,7 +30,7 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 
 			var users = await _userService.PostAsyncList("GetAllUsers",userDTO,true);
 			var roles = await _roleService.PostAsyncList("GetAllRoles",roleDTO,true);
-			var userRoles = await _userRoleService.PostAsyncList("GetAllUserRoles",userRoleDTO,true);
+			var userRoles = await _userRoleService.PostAsyncList("GetAllUserRoles",userRoleDTO, true);
 
 			UserViewModel userViewModel = new UserViewModel()
 			{

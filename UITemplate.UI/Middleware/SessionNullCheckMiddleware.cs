@@ -16,15 +16,16 @@ namespace UITemplate.UI.Middleware
 
 		public async Task Invoke(HttpContext httpContext)
 		{
+			
 			var path = httpContext.Request.Path.Value;
 			var protectedPaths = new List<string>
 		{
-			"/Anasayfa", "/Users"
+			"/admin/anasayfa", "/admin/users"
 		};
 
 			if (protectedPaths.Any(p => path.Contains(p)))
 			{
-				if (httpContext.Session.GetString("UserId") == null)
+				if (httpContext.Session.GetString("Id") == null)
 				{
 					httpContext.Response.Redirect("/admin/login");
 					return;

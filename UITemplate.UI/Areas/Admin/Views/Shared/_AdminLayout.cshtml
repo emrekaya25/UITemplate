@@ -30,7 +30,7 @@
 	<!-- Site wrapper -->
 	<div b-5110b5n92p class="wrapper">
 		<!-- Navbar -->
-		<nav b-5110b5n92p class="main-header navbar navbar-expand shadow" style="background-color:seagreen; color:white !important;">
+		<nav b-5110b5n92p class="main-header navbar navbar-expand shadow" style="background-color:#68689e; color:white !important;">
 			<!-- Left navbar links -->
 			<div class="col col-6">
 				<ul b-5110b5n92p class="navbar-nav">
@@ -43,10 +43,10 @@
 
 			<div class="d-flex col col-6 justify-content-end">
 				<ul b-5110b5n92p class="navbar-nav">
-					@* 					@using (Html.BeginForm("ProfilePage", "User", FormMethod.Post, new { id = "getUserDetailLayout", style = "display: inline-block;" }))
+					@using (Html.BeginForm("GetUser", "User", FormMethod.Post, new { id = "getUserDetailLayout", style = "display: inline-block;" }))
 					{
 					<li b-5110b5n92p class="nav-item d-none d-sm-inline-block">
-					<input hidden="hidden" name="Id" value="@Convert.ToInt64(Accessor.HttpContext.Session.GetString("UserId"))" />
+					<input hidden="hidden" name="Id" value="@Convert.ToInt64(Accessor.HttpContext.Session.GetString("Id"))" />
 					<button style="border:none;background:none; font-weight:bolder;" type="submit" class="nav-link text-light shadow">Profil</button>
 					</li>
 					}
@@ -57,14 +57,14 @@
 					<li b-5110b5n92p class="nav-item d-none d-sm-inline-block">
 					<button style="border:none;background:none; font-weight:bolder;" type="submit" class="nav-link text-light shadow">Çıkış Yap</button>
 					</li>
-					} *@
+					} 
 				</ul>
 			</div>
 
 		</nav>
 		<!-- /.navbar -->
 		<!-- Main Sidebar Container -->
-		<aside style="background-color:seagreen;" b-5110b5n92p class="main-sidebar sidebar-dark-primary elevation-4">
+		<aside style="background-color:#68689e;" b-5110b5n92p class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
 			@*             <a b-5110b5n92p href="/Anasayfa" class="brand-link">
 			<span b-5110b5n92p class="brand-text font-weight-light">ERPSystem</span>
@@ -76,11 +76,11 @@
 				<div b-5110b5n92p class="user-panel mt-1 pb-1 pt-1 mb-1 d-flex">
 					<div b-5110b5n92p class="info">
 
-						@* 						<a type="button" class="d-block" href="/Anasayfa" style="background:none; border:none; color:white;">
+						<a type="button" class="d-block" href="/admin/anasayfa" style="background:none; border:none; color:white;">
 						<span>
-						<img class="img-circle" src="data:image/jpeg;base64,@Accessor.HttpContext.Session.GetString("UserImage")" alt="User Avatar">
-						</span><span style="text-transform:uppercase;">@Accessor.HttpContext.Session.GetString("Name")</span>
-						</a> *@
+						<img class="img-circle" src="data:image/jpeg;base64,@Accessor.HttpContext.Session.GetString("Image")" alt="Avatar">
+						</span><span style="text-transform:uppercase; margin-left:5px;">@Accessor.HttpContext.Session.GetString("Name")</span>
+						</a>
 					</div>
 				</div>
 
@@ -89,7 +89,7 @@
 					<div b-5110b5n92p class="input-group" data-widget="sidebar-search">
 						<input b-5110b5n92p style="background-color:whitesmoke; color:black;" class="form-control form-control-sidebar" type="search" placeholder="Ara..." aria-label="Search">
 						<div b-5110b5n92p class="input-group-append">
-							<button b-5110b5n92p style="background-color:whitesmoke;color:seagreen;" class="btn btn-sidebar">
+							<button b-5110b5n92p style="background-color:whitesmoke;color:#68689e;" class="btn btn-sidebar">
 								<i b-5110b5n92p class="fas fa-search fa-fw"></i>
 							</button>
 						</div>
@@ -104,7 +104,7 @@
 
 						<li b-5110b5n92p class="nav-item">
 							<a b-5110b5n92p href="/admin/anasayfa" class="nav-link">
-								<i class="nav-icon fas fa-coffee"></i>
+								<i class="nav-icon fas fa-house"></i>
 								<p b-5110b5n92p>
 									Anasayfa
 								</p>
@@ -116,6 +116,15 @@
 								<i b-5110b5n92p class="nav-icon far fa-user"></i>
 								<p b-5110b5n92p>
 									Kullanıcı
+								</p>
+							</a>
+						</li>
+
+						<li b-5110b5n92p class="nav-item">
+							<a b-5110b5n92p href="/admin/roles" class="nav-link">
+								<i b-5110b5n92p class="nav-icon far fa-bookmark"></i>
+								<p b-5110b5n92p>
+									Roller
 								</p>
 							</a>
 						</li>
@@ -170,7 +179,7 @@
 		}
 
 		.bg-primary {
-			background-color: seagreen !important;
+			background-color: #68689e !important;
 			color: white !important;
 		}
 
@@ -190,7 +199,7 @@
 			}
 
 		.page-link {
-			background-color: seagreen !important;
+			background-color: #68689e !important;
 			color: white !important;
 		}
 	</style>

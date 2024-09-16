@@ -1,4 +1,4 @@
-﻿.notifications-container {
+.notifications-container {
     max-height: 100vh;
     max-width: 320px;
     pointer-events: none;
@@ -56,7 +56,7 @@
     bottom: var(--distance)
 }
 
-.notifications-container > * {
+.notifications-container>* {
     pointer-events: auto
 }
 
@@ -115,9 +115,9 @@
     width: var(--notify-close-icon-size)
 }
 
-    .notify__close * {
-        pointer-events: none
-    }
+.notify__close * {
+    pointer-events: none
+}
 
 .notify__title {
     font-size: 1rem;
@@ -135,17 +135,17 @@
     border: 1px solid currentColor
 }
 
-    .notify--type-1 .notify__close {
-        color: var(--notify-gray-3)
-    }
+.notify--type-1 .notify__close {
+    color: var(--notify-gray-3)
+}
 
-    .notify--type-1 .notify__title {
-        color: var(--notify-gray)
-    }
+.notify--type-1 .notify__title {
+    color: var(--notify-gray)
+}
 
-    .notify--type-1 .notify__text {
-        color: var(--notify-gray-2)
-    }
+.notify--type-1 .notify__text {
+    color: var(--notify-gray-2)
+}
 
 .notify--type-2 {
     color: var(--notify-gray)
@@ -155,9 +155,9 @@
     color: var(--notify-white)
 }
 
-    .notify--type-3 .notify__text {
-        color: var(--notify-white-2)
-    }
+.notify--type-3 .notify__text {
+    color: var(--notify-white-2)
+}
 
 .notify--error.notify--type-1 {
     box-shadow: 0 2px 26px rgba(215, 0, 0, 0.1);
@@ -270,17 +270,17 @@
     padding-bottom: calc(var(--notify-padding) + var(--progress-height))
 }
 
-    .notify.notify-autoclose::before {
-        animation: progress calc(var(--timeout) * 1ms) linear forwards;
-        bottom: 0;
-        content: '';
-        height: var(--progress-height);
-        left: 0;
-        position: absolute;
-        transform: scale3d(1, 1, 1);
-        transform-origin: left;
-        width: 100%
-    }
+.notify.notify-autoclose::before {
+    animation: progress calc(var(--timeout) * 1ms) linear forwards;
+    bottom: 0;
+    content: '';
+    height: var(--progress-height);
+    left: 0;
+    position: absolute;
+    transform: scale3d(1, 1, 1);
+    transform-origin: left;
+    width: 100%
+}
 
 @keyframes progress {
     to {

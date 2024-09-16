@@ -1,6 +1,7 @@
-using UITemplate.Model.DTO.Role;
+﻿using UITemplate.Model.DTO.Role;
 using UITemplate.Model.DTO.User;
 using UITemplate.Model.ExceptionHelper;
+using UITemplate.UI.Middleware;
 using UITemplate.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +12,8 @@ builder.Services.AddDistributedMemoryCache(); // Session verilerini bellekte sak
 builder.Services.AddSession(options =>
 {
 	options.IdleTimeout = TimeSpan.FromMinutes(30);
-	options.Cookie.HttpOnly = true; //taray�c� taraf�ndaki JavaScript kodunun �erezlere (cookies) eri�imini engeller.
-	options.Cookie.IsEssential = true; //GDPR(General Data Protection Regulation) uyumlulu�u
+	options.Cookie.HttpOnly = true; //tarayıcı tarafındaki JavaScript kodunun çerezlere (cookies) erişimini engeller.
+	options.Cookie.IsEssential = true; //GDPR(General Data Protection Regulation) uyumluluğu
 });
 
 
@@ -39,30 +40,48 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseApiResponseMiddleware();
+
 app.UseSession();
+
+app.UseSessionNullCheckMiddleware();
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+app.UseCors(opt => { opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
+
+
 app.UseAuthorization();
 
-app.MapControllerRoute(
-	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+app.Use(async (context, next) =>
+{
+	await next();
+
+	if (context.Response.StatusCode == 404 && !context.Response.HasStarted)
+	{
+		// 404 sayfasýný göster
+		//context.Request.Path = "/Admin/ExtraPages/ErrorPages/NotFound.html"; // 404 sayfasýnýn yolunu güncelleyin
+		context.Response.Redirect("/Admin/ExtraPages/ErrorPages/NotFound.html");
+	}
+});
 
 app.UseEndpoints(endpoints =>
 {
 	endpoints.MapControllerRoute(
-	  name: "areas",
-	  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-	);
-});
+  name: "areas",
+  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
 
-app.Use(async (context, next) =>
-{
-	if (!context.User.Identity.IsAuthenticated)
+	// Kök URL'ye gelen talepleri Login'e yönlendir
+	endpoints.MapGet("/", context =>
 	{
 		context.Response.Redirect("/admin/login");
-		return;
-	}
-
-	await next();
+		return Task.CompletedTask;
+	});
 });
+
 
 app.Run();

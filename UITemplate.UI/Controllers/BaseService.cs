@@ -18,7 +18,7 @@ namespace UITemplate.UI.Services
 			_httpContextAccessor = httpContextAccessor;
 		}
 
-		private RestRequest CreateRequest(string urlTag, TEntity entity, bool includeToken = true)
+		private RestRequest CreateRequest(string urlTag, TEntity entity,bool includeToken)
 		{
 			var url = "https://localhost:7272/api/" + urlTag;
 			var request = new RestRequest(url, Method.Post);

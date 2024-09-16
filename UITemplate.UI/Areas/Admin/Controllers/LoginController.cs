@@ -45,6 +45,7 @@ namespace UITemplate.UI.Areas.Admin.Controllers
                 HttpContext.Session.SetString("Token", responseObject.Data.Token);
                 HttpContext.Session.SetString("Name", responseObject.Data.Name + " " + responseObject.Data.LastName);
                 HttpContext.Session.SetString("Email",responseObject.Data.Email);
+                HttpContext.Session.SetString("Image", responseObject.Data.Image);
                 HttpContext.Session.SetString("Roles", JsonConvert.SerializeObject(responseObject.Data.Roles));
 
                 //var roleNames = JsonConvert.DeserializeObject<List<UserRoleDTO>>(HttpContext.Session.GetString("Roles"));
@@ -57,5 +58,13 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 				return RedirectToAction("Index", "Login");
 			}
         }
+
+        [HttpPost("/logout")]
+        public async Task<IActionResult> Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Login");
+        }
+
     }
 }

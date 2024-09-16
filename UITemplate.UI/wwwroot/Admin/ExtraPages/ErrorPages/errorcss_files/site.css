@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap');
 /*Base Style Start*/
 * {
     margin: 0;
@@ -142,18 +142,16 @@ video {
 .ahl-secondary-bgcolor {
     background-color: var(--ahl-secondary-color);
 }
-
 .fs-2FA {
     font-size: 22px;
     font-weight: bold;
     color: #1b568b !important;
     line-height: 30px;
-    width: 70px;
+    width:70px;
 }
-
 .dropdown-menu2 {
-    background: white !important;
-    z-index: 9999;
+    background:white !important;
+    z-index:9999;
 }
 
 .fs-13 {
@@ -167,7 +165,6 @@ video {
 .fs-15 {
     font-size: 15px;
 }
-
 .fs-16 {
     font-size: 16px;
 }
@@ -427,7 +424,7 @@ blockquote {
         display: block;
         padding: 0;
         margin: 0;
-        margin-left: -1rem;
+        margin-left:-1rem;
         transition: all 200ms linear;
         max-width: 190px;
         overflow: hidden;
@@ -1284,7 +1281,7 @@ footer {
 
 
 /*Attachment2*/
-.section-b .video-container {
+.section-b  .video-container {
     position: relative;
     overflow: hidden;
     width: 100%;
@@ -1299,7 +1296,6 @@ footer {
         min-height: 100%;
         z-index: -1;
     }
-
 .section-b video {
     width: 100%;
     height: 100%;
@@ -1567,7 +1563,7 @@ footer {
     height: 4rem;
     line-height: 4rem;
     text-align: center;
-    border: .1rem solid var(--ahl-primary-color);
+    border:.1rem solid var(--ahl-primary-color);
     background-color: var(--ahl-primary-color);
     color: #fff;
     border-radius: 50%;

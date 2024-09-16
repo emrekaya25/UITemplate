@@ -6,7 +6,7 @@
 @inject IHttpContextAccessor Accessor
 
 @{
-    var roleNames = JsonConvert.DeserializeObject<List<UserRoleDTO>>(Accessor.HttpContext.Session.GetString("Roles"));
+    var roles = string.Join(", ", Model.User.UserRoles.Select(x => x.RoleName));
 }
 
 @{
@@ -19,29 +19,26 @@
         <div class="col-md-12">
             <div class="card mb-3">
 
-                <div class="card-header d-flex justify-content-end">
+                <div class="card-header d-flex justify-content-between">
                     <div>
-
+                        <h5 class="card-title" style="font-size: 24px; font-weight: bold; color: #333; margin: 10px; text-align: left;">@Model.User.Name @Model.User.LastName</h5>
+                    </div>
+                    <div class="ml-auto">
                         <button class="btn btn-warning m-1"
                                 onclick='updateUserModal("@Model.User.Id","@Model.User.Name","@Model.User.LastName","@Model.User.Email","@Model.User.Password","@Model.User.Image","@string.Join(", ", Model.User.UserRoles.Select(x => x.RoleId))")' data-toggle="modal" data-target="#modal-updateUserModal">
                             Güncelle
                         </button>
-                        <!-- string.Join(", ", Model.User.UserRoles.Select(x => x.RoleId)) bu kod koleksiyondaki verileri alıp virgülle ayırarak tek string haline çeviriyor.-->
                     </div>
                 </div>
 
                 <div class="row g-0">
-                    <div class="col-md-4" style="margin-top: auto; margin-bottom: auto; padding-left: 40px;">
-                        <img src="data:image/jpeg;base64,@Model.User.Image" class="img-fluid rounded-start" alt="User Photo" style="min-height:250px; max-height:250px;" height: auto;">
+                    <div class="col-md-4" style="margin-top: auto; margin-bottom: auto; padding-left: 40px; padding-bottom: 40px; padding-top: 40px;">
+                        <img src="data:image/jpeg;base64,@Model.User.Image" class="img-fluid rounded-circle" alt="User Photo" style="min-height: 250px; max-height: 250px; border-radius: 50%; object-fit: cover;">
                     </div>
                     <div class="col-md-8" style="margin-top: auto; margin-bottom: auto;">
                         <div class="card-body">
-                            <h5 class="card-title" style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 10px;">@Model.User.Name</h5>
-                            <p class="card-text" style="font-size: 18px; color: #666; margin-bottom: 10px;">@Model.User.Email</p>
-                            <p class="card-text" style="font-size: 18px; color: #666; margin-bottom: 10px;">Yetkiler:</p>
-                            <ul class="list-group">
-                                <p class="text-muted text-sm"><b> @string.Join(", ", Model.User.UserRoles.Select(x => x.RoleName))  </b> </p>
-                            </ul>
+                            <p class="card-text" style="font-size: 18px; color: #666; margin-bottom: 10px;"><b>Email:</b> @Model.User.Email</p>
+                            <p class="card-text" style="font-size: 18px; color: #666; margin-bottom: 10px;"><b>Rol/Roller:</b> @string.Join(", ", Model.User.UserRoles.Select(x => x.RoleName)) </p>
                         </div>
                     </div>
                 </div>
@@ -91,29 +88,37 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="txtUserImage_Update">Fotoğraf</label>
-                            <input name="Image" type="file" class="form-control" rows="5" id="txtUserImage_Update" />
+                            <label for="txtUserImage_Update">
+                                Fotoğraf
+                                <span class="info-icon" style="display: inline-block; font-size: 12px; background-color: #007bff; color: white; border-radius: 50%; width: 16px; height: 16px; text-align: center; line-height: 16px; margin-left: 5px; position: relative;">
+                                    i
+                                    <span class="tooltip-text" style="visibility: hidden; width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 5px; padding: 5px 10px; position: absolute; z-index: 1; bottom: 125%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s;">Fotoğrafı değiştirmek istemiyorsanız seçim yapmayın.</span>
+                                </span>
+                            </label>
+                            <input name="Image" style=" height: 43px;" type="file" class="form-control" rows="5" id="txtUserImage_Update" />
                         </div>
 
-                        <div class="form-group">
-                            <label for="txtUserRoles_Update">Roller</label>
-                            <div id="txtUserRoles_Update" class="row">
-                                @foreach (var role in Model.Roles)
-                                {
-                                    <div class="col-md-4 col-sm-6">
-                                        <div class="role-checkbox" style="border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease; padding: 5px; margin-bottom: 10px;" onclick="toggleCheckbox('role_@role.Id')">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="UserRoles[]" value="@role.Id" id="role_@role.Id" style="cursor: pointer;">
-                                                <label class="form-check-label" for="role_@role.Id" style="margin-left: 10px;">
-                                                    @role.Name
-                                                </label>
+                        @if (roles.Contains("Admin"))
+                        {
+                            <div class="form-group">
+                                <label for="txtUserRoles_Update">Roller</label>
+                                <div id="txtUserRoles_Update" class="row">
+                                    @foreach (var role in Model.Roles)
+                                    {
+                                        <div class="col-md-4 col-sm-6">
+                                            <div class="role-checkbox" style="border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease; padding: 5px; margin-bottom: 10px;" onclick="toggleCheckbox('role_@role.Id')">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="UserRoles[]" value="@role.Id" id="role_@role.Id" style="cursor: pointer;">
+                                                    <label class="form-check-label" for="role_@role.Id" style="margin-left: 10px;">
+                                                        @role.Name
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
+                                </div>
                             </div>
-                        </div>
-
+                        }
 
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -169,4 +174,15 @@
         $('#txtUserRoles_Update').val(userRoles);
 
     }
+
+    // user güncelleme i butonu
+    document.querySelector('.info-icon').addEventListener('mouseenter', function () {
+        this.querySelector('.tooltip-text').style.visibility = 'visible';
+        this.querySelector('.tooltip-text').style.opacity = '1';
+    });
+
+    document.querySelector('.info-icon').addEventListener('mouseleave', function () {
+        this.querySelector('.tooltip-text').style.visibility = 'hidden';
+        this.querySelector('.tooltip-text').style.opacity = '0';
+    });
 </script>

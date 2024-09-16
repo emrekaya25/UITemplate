@@ -1,16 +1,17 @@
-﻿﻿
+﻿
 .big_text {
     display: grid;
     place-items: center;
+
 }
 
-.big_text h1 {
-    font-size: 40rem;
-    transform: translatez(20rem);
-}
+    .big_text h1 {
+        font-size: 40rem;
+        transform: translatez(20rem);
+    }
 
 .color_blue {
-    color: var(--ahl-primary-color);
+    color: #68689e !important;
     text-shadow: none;
     animation: visible 2s infinite;
 }
@@ -22,7 +23,7 @@
 }
 
 a {
-    color: var(--ahl-primary-color) !important;
+    color: #68689e !important;
     cursor: pointer;
     font-size: 2.4rem;
 }
@@ -33,7 +34,7 @@ a {
 }
 
     .small_texts p {
-        color: #888a85;
+        color: #68689e;
         animation: float 8s infinite;
         transform: translatey(4rem);
     }

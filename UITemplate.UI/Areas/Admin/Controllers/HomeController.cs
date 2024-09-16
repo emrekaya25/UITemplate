@@ -24,7 +24,7 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 		{
 			UserDTO user = new UserDTO();
 			RoleDTO role = new RoleDTO();
-			var users = await _userService.PostAsyncList("GetAllUsers", user, false);
+			var users = await _userService.PostAsyncList("GetAllUsers", user, true);
 			var roles = await _roleService.PostAsyncList("GetAllRoles", role, false);
 
 			HomeViewModel homeViewModel = new HomeViewModel()
