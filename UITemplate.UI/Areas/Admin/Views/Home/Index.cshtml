@@ -6,7 +6,8 @@
 @inject IHttpContextAccessor Accessor
 
 @{
-	var roleNames = JsonConvert.DeserializeObject<List<UserRoleDTO>>(Accessor.HttpContext.Session.GetString("Roles"));
+	var sessionRoles = JsonConvert.DeserializeObject<List<UserRoleDTO>>(Accessor.HttpContext.Session.GetString("Roles"));
+	var roleNames = string.Join(",", sessionRoles.Select(x => x.RoleName));
 }
 
 @{
@@ -19,72 +20,47 @@
 		<div class="col">
 			<div class="container text-center">
 				<div class="row">
+					@if (@roleNames.Contains("Admin"))
+					{
+							int users = Model.Users.Count();
+							int roles = Model.Roles.Count();
+						
+						<div class="col">
+							<div class="col-lg-12 col-6">
+								<!-- small box -->
+								<div class="small-box bg-success" style="min-width:245px;">
+									<div class="inner">
 
-					<div class="col">
-						<div class="col-lg-12 col-6">
-							<!-- small box -->
-							<div class="small-box bg-success" style="min-width:245px;">
-								<div class="inner">
-									<h3>2</h3>
+										<h3>@users</h3>
+										<p>Kullanıcı Sayısı</p>
 
-									<p>Onaylanan İstekler</p>
+									</div>
+									<div class="icon">
+										<i class="fa-solid fa-check"></i>
+									</div>
+									<a href="/admin/users" class="small-box-footer">Daha fazla bilgi <i class="fas fa-arrow-circle-right"></i></a>
 								</div>
-								<div class="icon">
-									<i class="fa-solid fa-check"></i>
-								</div>
-								<a href="/Requests" class="small-box-footer">Daha fazla bilgi <i class="fas fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 
-						<div class="col-lg-12 col-6">
-							<!-- small box -->
-							<div class="small-box bg-orange" style="min-width:245px;">
-								<div class="inner">
-									<h3>5</h3>
+						<div class="col">
+							<div class="col-lg-12 col-6">
+								<!-- small box -->
+								<div class="small-box bg-lime" style="min-width:245px;">
+									<div class="inner">
 
-									<p>Bekleyen İstekler</p>
+										<h3>@roles</h3>
+										<p>Rol Sayısı</p>
+
+									</div>
+									<div class="icon">
+										<i class="fa-solid fa-database"></i>
+									</div>
+									<a href="/admin/roles" class="small-box-footer">Daha fazla bilgi <i class="fas fa-arrow-circle-right"></i></a>
 								</div>
-								<div class="icon">
-									<i class="fa-regular fa-hand-point-up"></i>
-								</div>
-								<a href="/Requests  " class="small-box-footer">Daha fazla bilgi <i class="fas fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
-					</div>
-
-					<div class="col">
-
-						<div class="col-lg-12 col-6">
-
-							<!-- small box -->
-							<div class="small-box bg-info" style="min-width:245px;">
-								<div class="inner">
-									<h3>5</h3>
-									<p>Ürün Çeşit Sayısı</p>
-								</div>
-								<div class="icon">
-									<i class="fa-solid fa-basket-shopping"></i>
-								</div>
-								<a href="/Products" class="small-box-footer">Daha fazla bilgi <i class="fas fa-arrow-circle-right"></i></a>
-							</div>
-						</div>
-						<div class="col-lg-12 col-6">
-							<!-- small box -->
-							<div class="small-box bg-lime" style="min-width:245px;">
-								<div class="inner">
-									<h3>9</h3>
-									<p>Stoktaki Toplam Ürün Sayısı</p>
-								</div>
-								<div class="icon">
-									<i class="fa-solid fa-database"></i>
-								</div>
-								<a href="/Stocks" class="small-box-footer">Daha fazla bilgi <i class="fas fa-arrow-circle-right"></i></a>
-							</div>
-						</div>
-
-
-					</div>
-
+					}
 
 				</div>
 			</div>

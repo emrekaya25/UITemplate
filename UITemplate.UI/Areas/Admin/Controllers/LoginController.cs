@@ -28,18 +28,17 @@ namespace UITemplate.UI.Areas.Admin.Controllers
         [HttpPost("/login")]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
-            var url = "https://localhost:7272/api/Login";
-            var client = new RestClient(url);
-            var request = new RestRequest(url,Method.Post);
-            request.AddHeader("Content-Type","application/json");
-            var body = JsonConvert.SerializeObject(loginDTO);
-            request.AddBody(body,"application/json");
+			var url = "https://localhost:7272/api/Login";
+			var client = new RestClient(url);
+			var request = new RestRequest(url, Method.Post);
+			request.AddHeader("Content-Type", "application/json");
+			var body = JsonConvert.SerializeObject(loginDTO);
+			request.AddBody(body, "application/json");
 
-            RestResponse response = await client.ExecuteAsync(request);
-            var responseObject = JsonConvert.DeserializeObject<ApiResponse<LoginDTO>>(response.Content);
+			RestResponse response = await client.ExecuteAsync(request);
+			var responseObject = JsonConvert.DeserializeObject<ApiResponse<LoginDTO>>(response.Content);
 
-            
-            if (responseObject.StatusCode == (int)HttpStatusCode.OK)
+			if (responseObject.StatusCode == (int)HttpStatusCode.OK)
             {
                 HttpContext.Session.SetString("Id",responseObject.Data.Id.ToString());
                 HttpContext.Session.SetString("Token", responseObject.Data.Token);
@@ -48,9 +47,18 @@ namespace UITemplate.UI.Areas.Admin.Controllers
                 HttpContext.Session.SetString("Image", responseObject.Data.Image);
                 HttpContext.Session.SetString("Roles", JsonConvert.SerializeObject(responseObject.Data.Roles));
 
-                //var roleNames = JsonConvert.DeserializeObject<List<UserRoleDTO>>(HttpContext.Session.GetString("Roles"));
+                var roleNames = JsonConvert.DeserializeObject<List<UserRoleDTO>>(HttpContext.Session.GetString("Roles"));
+                var roles = string.Join(",", roleNames.Select(x=>x.RoleName));
 
-                return RedirectToAction("Index", "Home");
+                if (roles.Contains("Admin"))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("GetUser","User", new { userId = responseObject.Data.Id });
+                }
+                
             }
             else
             {

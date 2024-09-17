@@ -6,7 +6,6 @@
 @inject IHttpContextAccessor Accessor
 
 @{
-    var roleNames = JsonConvert.DeserializeObject<List<UserRoleDTO>>(Accessor.HttpContext.Session.GetString("Roles"));
     int count = 0;
 }
 
@@ -69,11 +68,11 @@
                                         </div>
                                         <div class="card-footer text-right">
                                             <div class="d-inline-block">
-                                                @using (Html.BeginForm("GetUser","User",FormMethod.Post, new {id = "getUserForm", enctype = "multipart/form-data" }))
+                                                @using (Html.BeginForm("GetUser","User",FormMethod.Get, new {id = "getUserForm", enctype = "multipart/form-data" }))
                                                 {
                                                     <button type="submit" class="btn btn-sm btn-primary">
                                                         <i class="fas fa-user"></i> İncele
-                                                        <input hidden="hidden" name="Id" value="@user.Id" />
+                                                        <input hidden="hidden" name="userId" value="@user.Id" />
                                                     </button>
                                                 }
                                             </div>

@@ -6,7 +6,8 @@
 @inject IHttpContextAccessor Accessor
 
 @{
-    var roles = string.Join(", ", Model.User.UserRoles.Select(x => x.RoleName));
+    var sessionRoles = JsonConvert.DeserializeObject<List<UserRoleDTO>>(Accessor.HttpContext.Session.GetString("Roles"));
+    var roles = string.Join(",", sessionRoles.Select(x => x.RoleName));
 }
 
 @{
@@ -136,6 +137,36 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+
+@functions {
+    string DecodeHtmlCharacters(string htmlEncodedString)
+    {
+        return System.Net.WebUtility.HtmlDecode(htmlEncodedString);
+    }
+}
+@if (TempData["userResponseSuccess"] != null)
+{
+    var x = TempData["userResponseSuccess"].ToString();
+    <script>
+        Swal.fire({
+            title: "Başarılı!",
+            html: "@Html.Raw(DecodeHtmlCharacters(x.Replace("-", "</br>")))",
+            icon: "success"
+        });
+    </script>
+}
+@if (TempData["userResponseError"] != null)
+{
+    var x = TempData["userResponseError"].ToString();
+    <script>
+        Swal.fire({
+            title: "Hata!",
+            html: "@Html.Raw(DecodeHtmlCharacters(x.Replace("-", "</br>")))",
+            icon: "error"
+        });
+    </script>
+}
 
 <script>
     function toggleCheckbox(checkboxId) {

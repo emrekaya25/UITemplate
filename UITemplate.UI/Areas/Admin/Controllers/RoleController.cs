@@ -7,6 +7,7 @@ using UITemplate.UI.Services;
 namespace UITemplate.UI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+
     public class RoleController : Controller
     {
         private readonly BaseService<RoleDTO> _roleService;

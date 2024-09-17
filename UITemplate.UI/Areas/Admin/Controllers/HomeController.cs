@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using UITemplate.Model.DTO.Role;
 using UITemplate.Model.DTO.User;
 using UITemplate.UI.Areas.Admin.Models;
+using Newtonsoft.Json;
+using UITemplate.Model.DTO.UserRole;
 
 namespace UITemplate.UI.Areas.Admin.Controllers
 {
@@ -24,8 +26,17 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 		{
 			UserDTO user = new UserDTO();
 			RoleDTO role = new RoleDTO();
+
+			var sessionRoles = JsonConvert.DeserializeObject<List<UserRoleDTO>>(HttpContext.Session.GetString("Roles"));
+			var roleNames = string.Join(",", sessionRoles.Select(x => x.RoleName));
+
+			if (!(roleNames.Contains("Admin")))
+			{
+				return View();
+			}
+
 			var users = await _userService.PostAsyncList("GetAllUsers", user, true);
-			var roles = await _roleService.PostAsyncList("GetAllRoles", role, false);
+			var roles = await _roleService.PostAsyncList("GetAllRoles", role, true);
 
 			HomeViewModel homeViewModel = new HomeViewModel()
 			{

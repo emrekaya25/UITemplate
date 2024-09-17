@@ -1,6 +1,9 @@
-﻿@{
+﻿@using Newtonsoft.Json
+@using UITemplate.Model.DTO.UserRole
+@{
 	@inject IHttpContextAccessor Accessor
-
+	var sessionRoles = JsonConvert.DeserializeObject<List<UserRoleDTO>>(Accessor.HttpContext.Session.GetString("Roles"));
+	var roleNames = string.Join(",", sessionRoles.Select(x => x.RoleName));
 }
 
 <!DOCTYPE html>
@@ -43,21 +46,21 @@
 
 			<div class="d-flex col col-6 justify-content-end">
 				<ul b-5110b5n92p class="navbar-nav">
-					@using (Html.BeginForm("GetUser", "User", FormMethod.Post, new { id = "getUserDetailLayout", style = "display: inline-block;" }))
+					@using (Html.BeginForm("GetUser", "User", FormMethod.Get, new { id = "getUserDetailLayout", style = "display: inline-block;" }))
 					{
-					<li b-5110b5n92p class="nav-item d-none d-sm-inline-block">
-					<input hidden="hidden" name="Id" value="@Convert.ToInt64(Accessor.HttpContext.Session.GetString("Id"))" />
-					<button style="border:none;background:none; font-weight:bolder;" type="submit" class="nav-link text-light shadow">Profil</button>
-					</li>
+						<li b-5110b5n92p class="nav-item d-none d-sm-inline-block">
+							<input hidden="hidden" name="userId" value="@Convert.ToInt64(Accessor.HttpContext.Session.GetString("Id"))" />
+							<button style="border:none;background:none; font-weight:bolder;" type="submit" class="nav-link text-light shadow">Profil</button>
+						</li>
 					}
 
 					@using (Html.BeginForm("Logout", "Login", FormMethod.Post, new { id = "Logout", style = "display: inline-block;" }))
 					{
 
-					<li b-5110b5n92p class="nav-item d-none d-sm-inline-block">
-					<button style="border:none;background:none; font-weight:bolder;" type="submit" class="nav-link text-light shadow">Çıkış Yap</button>
-					</li>
-					} 
+						<li b-5110b5n92p class="nav-item d-none d-sm-inline-block">
+							<button style="border:none;background:none; font-weight:bolder;" type="submit" class="nav-link text-light shadow">Çıkış Yap</button>
+						</li>
+					}
 				</ul>
 			</div>
 
@@ -77,9 +80,9 @@
 					<div b-5110b5n92p class="info">
 
 						<a type="button" class="d-block" href="/admin/anasayfa" style="background:none; border:none; color:white;">
-						<span>
-						<img class="img-circle" src="data:image/jpeg;base64,@Accessor.HttpContext.Session.GetString("Image")" alt="Avatar">
-						</span><span style="text-transform:uppercase; margin-left:5px;">@Accessor.HttpContext.Session.GetString("Name")</span>
+							<span>
+								<img class="img-circle" src="data:image/jpeg;base64,@Accessor.HttpContext.Session.GetString("Image")" alt="Avatar">
+							</span><span style="text-transform:uppercase; margin-left:5px;">@Accessor.HttpContext.Session.GetString("Name")</span>
 						</a>
 					</div>
 				</div>
@@ -104,30 +107,33 @@
 
 						<li b-5110b5n92p class="nav-item">
 							<a b-5110b5n92p href="/admin/anasayfa" class="nav-link">
-								<i class="nav-icon fas fa-house"></i>
+								<i class="nav-icon far fa-clipboard"></i>
 								<p b-5110b5n92p>
 									Anasayfa
 								</p>
 							</a>
 						</li>
+						@if (roleNames.Contains("Admin"))
+						{
+							<li b-5110b5n92p class="nav-item">
+								<a b-5110b5n92p href="/admin/users" class="nav-link">
+									<i b-5110b5n92p class="nav-icon far fa-user"></i>
+									<p b-5110b5n92p>
+										Kullanıcı
+									</p>
+								</a>
+							</li>
 
-						<li b-5110b5n92p class="nav-item">
-							<a b-5110b5n92p href="/admin/users" class="nav-link">
-								<i b-5110b5n92p class="nav-icon far fa-user"></i>
-								<p b-5110b5n92p>
-									Kullanıcı
-								</p>
-							</a>
-						</li>
+							<li b-5110b5n92p class="nav-item">
+								<a b-5110b5n92p href="/admin/roles" class="nav-link">
+									<i b-5110b5n92p class="nav-icon far fa-bookmark"></i>
+									<p b-5110b5n92p>
+										Roller
+									</p>
+								</a>
+							</li>
+						}
 
-						<li b-5110b5n92p class="nav-item">
-							<a b-5110b5n92p href="/admin/roles" class="nav-link">
-								<i b-5110b5n92p class="nav-icon far fa-bookmark"></i>
-								<p b-5110b5n92p>
-									Roller
-								</p>
-							</a>
-						</li>
 					</ul>
 				</nav>
 				<!-- /.sidebar-menu -->

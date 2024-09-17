@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using UITemplate.Model.DTO.Role;
 using UITemplate.Model.DTO.User;
 using UITemplate.Model.DTO.UserRole;
@@ -28,6 +29,7 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 			RoleDTO roleDTO = new RoleDTO();
 			UserRoleDTO userRoleDTO = new UserRoleDTO();
 
+
 			var users = await _userService.PostAsyncList("GetAllUsers",userDTO,true);
 			var roles = await _roleService.PostAsyncList("GetAllRoles",roleDTO,true);
 			var userRoles = await _userRoleService.PostAsyncList("GetAllUserRoles",userRoleDTO, true);
@@ -41,9 +43,11 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 			return View(userViewModel);
 		}
 
-		[HttpPost("/admin/user")]
-		public async Task<IActionResult> GetUser(UserDTO userDTO)
+		[HttpGet("/admin/user")]
+		public async Task<IActionResult> GetUser(int userId)
 		{
+			UserDTO userDTO = new UserDTO();
+			userDTO.Id = userId;
 			var user = await _userService.PostAsync("GetUser",userDTO,true);
 			RoleDTO roleDTO = new RoleDTO();
 			var roles = await _roleService.PostAsyncList("GetAllRoles",roleDTO,true);
@@ -138,7 +142,8 @@ namespace UITemplate.UI.Areas.Admin.Controllers
             {
                 TempData["userResponseSuccess"] = $"{responseObject.Message}";
             }
-            return RedirectToAction("Index","User");
+
+			return RedirectToAction("GetUser","User", new { userId = responseObject.Data.Id });
 		}
 
 		
