@@ -14,6 +14,7 @@ namespace UITemplate.Model.DTO.Role
             
         }
 		public int Id { get; set; } = 0;
+		public Guid Guid { get; set; } = Guid.Empty;
 		public string Name { get; set; } = "string";
 		public List<UserRoleDTO> UserRoles { get; set; } = new();
 	}

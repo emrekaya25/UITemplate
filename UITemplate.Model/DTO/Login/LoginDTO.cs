@@ -10,6 +10,7 @@ namespace UITemplate.Model.DTO.Login
     public class LoginDTO
     {
         public int Id { get; set; } = 0;
+        public Guid Guid { get; set; } = Guid.Empty;
         public string Name { get; set; } = "string";
         public string LastName { get; set; } = "string";
         public string Email { get; set; } = "string";

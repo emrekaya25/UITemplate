@@ -49,7 +49,7 @@
 					@using (Html.BeginForm("GetUser", "User", FormMethod.Get, new { id = "getUserDetailLayout", style = "display: inline-block;" }))
 					{
 						<li b-5110b5n92p class="nav-item d-none d-sm-inline-block">
-							<input hidden="hidden" name="userId" value="@Convert.ToInt64(Accessor.HttpContext.Session.GetString("Id"))" />
+							<input hidden="hidden" name="userGuid" value="@(Accessor.HttpContext.Session.GetString("Guid"))" />
 							<button style="border:none;background:none; font-weight:bolder;" type="submit" class="nav-link text-light shadow">Profil</button>
 						</li>
 					}

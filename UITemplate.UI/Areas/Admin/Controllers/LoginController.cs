@@ -41,6 +41,7 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 			if (responseObject.StatusCode == (int)HttpStatusCode.OK)
             {
                 HttpContext.Session.SetString("Id",responseObject.Data.Id.ToString());
+                HttpContext.Session.SetString("Guid",responseObject.Data.Guid.ToString());
                 HttpContext.Session.SetString("Token", responseObject.Data.Token);
                 HttpContext.Session.SetString("Name", responseObject.Data.Name + " " + responseObject.Data.LastName);
                 HttpContext.Session.SetString("Email",responseObject.Data.Email);

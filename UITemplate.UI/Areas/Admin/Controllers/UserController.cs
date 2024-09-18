@@ -44,10 +44,10 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 		}
 
 		[HttpGet("/admin/user")]
-		public async Task<IActionResult> GetUser(int userId)
+		public async Task<IActionResult> GetUser(Guid userGuid)
 		{
 			UserDTO userDTO = new UserDTO();
-			userDTO.Id = userId;
+			userDTO.Guid = userGuid;
 			var user = await _userService.PostAsync("GetUser",userDTO,true);
 			RoleDTO roleDTO = new RoleDTO();
 			var roles = await _roleService.PostAsyncList("GetAllRoles",roleDTO,true);
@@ -143,7 +143,7 @@ namespace UITemplate.UI.Areas.Admin.Controllers
                 TempData["userResponseSuccess"] = $"{responseObject.Message}";
             }
 
-			return RedirectToAction("GetUser","User", new { userId = responseObject.Data.Id });
+			return RedirectToAction("GetUser","User", new { userGuid = responseObject.Data.Guid });
 		}
 
 		

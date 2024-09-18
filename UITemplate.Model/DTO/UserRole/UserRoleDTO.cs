@@ -13,6 +13,7 @@ namespace UITemplate.Model.DTO.UserRole
             
         }
 		public int Id { get; set; } = 0;
+		public Guid Guid { get; set; } = Guid.Empty;
 		public int UserId { get; set; } = 0;
 		public string UserName { get; set; } = "string";
 		public int RoleId { get; set; } = 0;
