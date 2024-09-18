@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using UITemplate.Model.DTO.Role;
 using UITemplate.Model.DTO.UserRole;
 using UITemplate.UI.Areas.Admin.Models;
@@ -40,9 +41,20 @@ namespace UITemplate.UI.Areas.Admin.Controllers
         public async Task<IActionResult> AddRole(RoleDTO roleDTO)
         {
             var responseObject = await _roleService.PostAsync("AddRole",roleDTO,true);
-            if (responseObject.Data == null)
-            {
-                TempData["roleResponseError"] = $"{responseObject.Message}";
+
+			if (responseObject.ErrorInformation != null)
+			{
+				var errorList = new List<string>();
+
+				JArray errors = (JArray)responseObject.ErrorInformation.Error;
+				foreach (var error in errors)
+				{
+					errorList.Add(error.ToString());
+				}
+
+				string errorMessages = string.Join(", ", errorList);
+
+				TempData["roleResponseError"] = $"{errorMessages}";
             }
             else
             {
@@ -55,9 +67,20 @@ namespace UITemplate.UI.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteRole(RoleDTO roleDTO)
         {
             var responseObject = await _roleService.PostAsync("DeleteRole",roleDTO,true);
-            if (responseObject.Data == null)
-            {
-                TempData["roleResponseError"] = $"{responseObject.Message}";
+
+			if (responseObject.ErrorInformation != null)
+			{
+				var errorList = new List<string>();
+
+				JArray errors = (JArray)responseObject.ErrorInformation.Error;
+				foreach (var error in errors)
+				{
+					errorList.Add(error.ToString());
+				}
+
+				string errorMessages = string.Join(", ", errorList);
+
+				TempData["roleResponseError"] = $"{errorMessages}";
             }
             else
             {
@@ -70,9 +93,20 @@ namespace UITemplate.UI.Areas.Admin.Controllers
         public async Task<IActionResult> UpdateRole(RoleDTO roleDTO)
         {
             var responseObject = await _roleService.PostAsync("UpdateRole",roleDTO,true);
-            if (responseObject.Data == null)
-            {
-                TempData["roleResponseError"] = $"{responseObject.Message}";
+
+			if (responseObject.ErrorInformation != null)
+			{
+				var errorList = new List<string>();
+
+				JArray errors = (JArray)responseObject.ErrorInformation.Error;
+				foreach (var error in errors)
+				{
+					errorList.Add(error.ToString());
+				}
+
+				string errorMessages = string.Join(", ", errorList);
+
+				TempData["roleResponseError"] = $"{errorMessages}";
             }
             else
             {

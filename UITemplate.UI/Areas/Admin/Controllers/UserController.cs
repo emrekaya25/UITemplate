@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UITemplate.Model.DTO.Role;
 using UITemplate.Model.DTO.User;
 using UITemplate.Model.DTO.UserRole;
@@ -84,9 +85,21 @@ namespace UITemplate.UI.Areas.Admin.Controllers
             }
 
             var responseObject = await _userService.PostAsync("AddUser",userDTO,true);
-			if (responseObject.Data == null)
+
+			//hata mesajı bastırma çünkü errorInformation nesneleri jArray tipinde dönüyor.
+			if (responseObject.ErrorInformation != null)
 			{
-                TempData["userResponseError"] = $"{responseObject.Message}";
+				var errorList = new List<string>();
+
+				JArray errors = (JArray)responseObject.ErrorInformation.Error;
+				foreach (var error in errors)
+				{
+					errorList.Add(error.ToString());
+				}
+
+				string errorMessages = string.Join(", ", errorList);
+
+				TempData["userResponseError"] = $"{errorMessages}";
                
 			}
 			else
@@ -101,9 +114,20 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 		public async Task<IActionResult> DeleteUser(UserDTO userDTO)
 		{
 			var responseObject = await _userService.PostAsync("DeleteUser",userDTO,true);
-            if (responseObject.Data == null)
-            {
-                TempData["userResponseError"] = $"{responseObject.Message}";
+
+			if (responseObject.ErrorInformation != null)
+			{
+				var errorList = new List<string>();
+
+				JArray errors = (JArray)responseObject.ErrorInformation.Error;
+				foreach (var error in errors)
+				{
+					errorList.Add(error.ToString());
+				}
+
+				string errorMessages = string.Join(", ", errorList);
+
+				TempData["userResponseError"] = $"{errorMessages}";
 
             }
             else
@@ -133,9 +157,20 @@ namespace UITemplate.UI.Areas.Admin.Controllers
             }
 
             var responseObject = await _userService.PostAsync("UpdateUser",userDTO,true);
-            if (responseObject.Data == null)
-            {
-                TempData["userResponseError"] = $"{responseObject.Message}";
+
+			if (responseObject.ErrorInformation != null)
+			{
+				var errorList = new List<string>();
+
+				JArray errors = (JArray)responseObject.ErrorInformation.Error;
+				foreach (var error in errors)
+				{
+					errorList.Add(error.ToString());
+				}
+
+				string errorMessages = string.Join(", ", errorList);
+
+				TempData["userResponseError"] = $"{errorMessages}";
 
             }
             else
