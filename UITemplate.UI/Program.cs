@@ -1,6 +1,7 @@
 ﻿using UITemplate.Model.DTO.Role;
 using UITemplate.Model.DTO.User;
 using UITemplate.Model.ExceptionHelper;
+using UITemplate.UI.Controllers;
 using UITemplate.UI.Middleware;
 using UITemplate.UI.Services;
 
@@ -24,6 +25,7 @@ builder.Services.AddScoped<BaseService<UserDTO>>();
 builder.Services.AddScoped<BaseService<RoleDTO>>();
 builder.Services.AddScoped<ResponseChecker>();
 builder.Services.AddScoped(typeof(BaseService<>));
+builder.Services.AddScoped<SessionHelper>();
 
 var app = builder.Build();
 

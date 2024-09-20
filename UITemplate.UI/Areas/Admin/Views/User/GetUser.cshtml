@@ -6,8 +6,9 @@
 @inject IHttpContextAccessor Accessor
 
 @{
-    var sessionRoles = JsonConvert.DeserializeObject<List<UserRoleDTO>>(Accessor.HttpContext.Session.GetString("Roles"));
-    var roles = string.Join(",", sessionRoles.Select(x => x.RoleName));
+	var sessionRoles = JsonConvert.DeserializeObject<List<UserRoleDTO>>(Accessor.HttpContext.Session.GetString("Roles"));
+	var roles = string.Join(",", sessionRoles.Select(x => x.RoleName));
+	var userId = Convert.ToInt32(Accessor.HttpContext.Session.GetString("Id"));
 }
 
 @{
@@ -16,204 +17,261 @@
 }
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card mb-3">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card mb-3">
 
-                <div class="card-header d-flex justify-content-between">
-                    <div>
-                        <h5 class="card-title" style="font-size: 24px; font-weight: bold; color: #333; margin: 10px; text-align: left;">@Model.User.Name @Model.User.LastName</h5>
-                    </div>
-                    <div class="ml-auto">
-                        <button class="btn btn-warning m-1"
-                                onclick='updateUserModal("@Model.User.Id","@Model.User.Name","@Model.User.LastName","@Model.User.Email","@Model.User.Password","@Model.User.Image","@string.Join(", ", Model.User.UserRoles.Select(x => x.RoleId))")' data-toggle="modal" data-target="#modal-updateUserModal">
-                            Güncelle
-                        </button>
-                    </div>
-                </div>
+				<div class="card-header d-flex justify-content-between">
+					<div>
+						<h5 class="card-title" style="font-size: 24px; font-weight: bold; color: #333; margin: 10px; text-align: left;">@Model.User.Name @Model.User.LastName</h5>
+					</div>
+					<div class="ml-auto">
+						@if (roles.Contains("Admin") || userId == Model.User.Id)
+						{
+							<button class="btn btn-primary m-1"
+									onclick='updateUserPasswordModal("@Model.User.Id","@Model.User.Password")' data-toggle="modal" data-target="#modal-updateUserPasswordModal">
+								Şifre Değiştir
+							</button>
+							<button class="btn btn-warning m-1"
+									onclick='updateUserModal("@Model.User.Id","@Model.User.Guid","@Model.User.Name","@Model.User.LastName","@Model.User.Email","@Model.User.Password","@Model.User.Image","@string.Join(", ", Model.User.UserRoles.Select(x => x.RoleId))")' data-toggle="modal" data-target="#modal-updateUserModal">
+								Güncelle
+							</button>
+						}
+					</div>
+				</div>
 
-                <div class="row g-0">
-                    <div class="col-md-4" style="margin-top: auto; margin-bottom: auto; padding-left: 40px; padding-bottom: 40px; padding-top: 40px;">
-                        <img src="data:image/jpeg;base64,@Model.User.Image" class="img-fluid rounded-circle" alt="User Photo" style="min-height: 250px; max-height: 250px; border-radius: 50%; object-fit: cover;">
-                    </div>
-                    <div class="col-md-8" style="margin-top: auto; margin-bottom: auto;">
-                        <div class="card-body">
-                            <p class="card-text" style="font-size: 18px; color: #666; margin-bottom: 10px;"><b>Email:</b> @Model.User.Email</p>
-                            <p class="card-text" style="font-size: 18px; color: #666; margin-bottom: 10px;"><b>Rol/Roller:</b> @string.Join(", ", Model.User.UserRoles.Select(x => x.RoleName)) </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+				<div class="row g-0">
+					<div class="col-md-4" style="margin-top: auto; margin-bottom: auto; padding-left: 40px; padding-bottom: 40px; padding-top: 40px;">
+						<img src="data:image/jpeg;base64,@Model.User.Image" class="img-fluid rounded-circle" alt="User Photo" style="min-height: 250px; max-height: 250px; border-radius: 50%; object-fit: cover;">
+					</div>
+					<div class="col-md-8" style="margin-top: auto; margin-bottom: auto;">
+						<div class="card-body">
+							<p class="card-text" style="font-size: 18px; color: #666; margin-bottom: 10px;"><b>Email:</b> @Model.User.Email</p>
+							<p class="card-text" style="font-size: 18px; color: #666; margin-bottom: 10px;"><b>Rol/Roller:</b> @string.Join(", ", Model.User.UserRoles.Select(x => x.RoleName)) </p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 
 
 <div class="modal fade" id="modal-updateUserModal">
-    <div class="modal-dialog modal-updateUserModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Kullanıcı Güncelle</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            @{
+	<div class="modal-dialog modal-updateUserModal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Kullanıcı Güncelle</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			@{
 
 
-                using (Html.BeginForm("UpdateUser", "User", FormMethod.Post, new { id = "updateUserForm", enctype = "multipart/form-data" }))
-                {
-                    <div class="modal-body">
+				using (Html.BeginForm("UpdateUser", "User", FormMethod.Post, new { id = "updateUserForm", enctype = "multipart/form-data" }))
+				{
+					<div class="modal-body">
 
-                        <input id="updateUserId" hidden="hidden" name="Id" />
+						<input id="updateUserId"  hidden="hidden" name="Id" />
+						<input id="updateUserGuid" hidden="hidden"  name="Guid" />
 
-                        <div class="form-group">
-                            <label for="txtUserName_Update">Ad</label>
-                            <input name="Name" type="text" class="form-control" id="txtUserName_Update">
-                        </div>
+						<div class="form-group">
+							<label for="txtUserName_Update">Ad</label>
+							<input name="Name" type="text" class="form-control" id="txtUserName_Update">
+						</div>
 
-                        <div class="form-group">
-                            <label for="txtUserLastName_Update">Soyad</label>
-                            <input name="LastName" type="text" class="form-control" id="txtUserLastName_Update">
-                        </div>
+						<div class="form-group">
+							<label for="txtUserLastName_Update">Soyad</label>
+							<input name="LastName" type="text" class="form-control" id="txtUserLastName_Update">
+						</div>
 
-                        <div class="form-group">
-                            <label for="txtUserEmail_Update">Email</label>
-                            <input name="Email" type="email" class="form-control" id="txtUserEmail_Update">
-                        </div>
+						<div class="form-group">
+							<label for="txtUserEmail_Update">Email</label>
+							<input name="Email" type="email" class="form-control" id="txtUserEmail_Update">
+						</div>
 
-                        <div class="form-group">
-                            <label for="txtUserPassword_Update">Sifre</label>
-                            <input name="Password" type="password" class="form-control" id="txtUserPassword_Update">
-                        </div>
+						<div class="form-group">
+							<label for="txtUserImage_Update">
+								Fotoğraf
+								<span class="info-icon" style="display: inline-block; font-size: 12px; background-color: #007bff; color: white; border-radius: 50%; width: 16px; height: 16px; text-align: center; line-height: 16px; margin-left: 5px; position: relative;">
+									i
+									<span class="tooltip-text" style="visibility: hidden; width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 5px; padding: 5px 10px; position: absolute; z-index: 1; bottom: 125%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s;">Fotoğrafı değiştirmek istemiyorsanız seçim yapmayın.</span>
+								</span>
+							</label>
+							<input name="Image" style=" height: 43px;" type="file" class="form-control" rows="5" id="txtUserImage_Update" />
+						</div>
 
-                        <div class="form-group">
-                            <label for="txtUserImage_Update">
-                                Fotoğraf
-                                <span class="info-icon" style="display: inline-block; font-size: 12px; background-color: #007bff; color: white; border-radius: 50%; width: 16px; height: 16px; text-align: center; line-height: 16px; margin-left: 5px; position: relative;">
-                                    i
-                                    <span class="tooltip-text" style="visibility: hidden; width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 5px; padding: 5px 10px; position: absolute; z-index: 1; bottom: 125%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s;">Fotoğrafı değiştirmek istemiyorsanız seçim yapmayın.</span>
-                                </span>
-                            </label>
-                            <input name="Image" style=" height: 43px;" type="file" class="form-control" rows="5" id="txtUserImage_Update" />
-                        </div>
+						<div class="form-group" @(roles.Contains("Admin") ? "" : "hidden")>
+							<label for="txtUserRoles_Update">Roller</label>
+							<div id="txtUserRoles_Update" class="row">
+								@foreach (var role in Model.Roles)
+								{
+									<div class="col-md-4 col-sm-6">
+										<div class="role-checkbox" style="border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease; padding: 5px; margin-bottom: 10px;"
+											 onclick="toggleCheckbox('role_@role.Id')">
+											<div class="form-check">
+												<input class="form-check-input" type="checkbox" name="UserRoles[]" value="@role.Id" id="role_@role.Id" style="cursor: pointer;">
+												<label class="form-check-label" for="role_@role.Id" style="margin-left: 10px;">
+													@role.Name
+												</label>
+											</div>
+										</div>
+									</div>
+								}
+							</div>
+						</div>
 
-                        @if (roles.Contains("Admin"))
-                        {
-                            <div class="form-group">
-                                <label for="txtUserRoles_Update">Roller</label>
-                                <div id="txtUserRoles_Update" class="row">
-                                    @foreach (var role in Model.Roles)
-                                    {
-                                        <div class="col-md-4 col-sm-6">
-                                            <div class="role-checkbox" style="border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease; padding: 5px; margin-bottom: 10px;" onclick="toggleCheckbox('role_@role.Id')">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="UserRoles[]" value="@role.Id" id="role_@role.Id" style="cursor: pointer;">
-                                                    <label class="form-check-label" for="role_@role.Id" style="margin-left: 10px;">
-                                                        @role.Name
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        }
-
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                        <button type="submit" class="btn btn-primary" id="btnUpdateUser">Kaydet</button>
-                    </div>
-                }
+					</div>
+					<div class="modal-footer justify-content-between">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+						<button type="submit" class="btn btn-primary" id="btnUpdateUser">Kaydet</button>
+					</div>
+				}
 
 
 
-            }
-        </div>
+			}
+		</div>
 
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modal-updateUserPasswordModal">
+	<div class="modal-dialog modal-updateUserPasswordModal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Şifre Değiştir</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			@{
+
+
+				using (Html.BeginForm("ResetPassword", "User", FormMethod.Post, new { id = "resetPasswordForm", enctype = "multipart/form-data" }))
+				{
+					<div class="modal-body">
+
+						<input id="updateUserPasswordId" hidden="hidden" name="Id" />
+
+						<div class="form-group">
+							<label for="txtUserConfirmPassword_Update">Gecerli Parola</label>
+							<input name="ConfirmPassword" type="password" class="form-control" id="txtUserConfirmPassword_Update">
+						</div>
+
+						<div class="form-group">
+							<label for="txtUserPassword_Update">Yeni Parola</label>
+							<input name="Password" type="password" class="form-control" id="txtUserPassword_Update">
+						</div>
+
+
+
+
+					</div>
+					<div class="modal-footer justify-content-between">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+						<button type="submit" class="btn btn-primary" id="btnUpdateUser">Kaydet</button>
+					</div>
+				}
+
+
+
+			}
+		</div>
+
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
 </div>
 
 
 @functions {
-    string DecodeHtmlCharacters(string htmlEncodedString)
-    {
-        return System.Net.WebUtility.HtmlDecode(htmlEncodedString);
-    }
+	string DecodeHtmlCharacters(string htmlEncodedString)
+	{
+		return System.Net.WebUtility.HtmlDecode(htmlEncodedString);
+	}
 }
 @if (TempData["userResponseSuccess"] != null)
 {
-    var x = TempData["userResponseSuccess"].ToString();
-    <script>
-        Swal.fire({
-            title: "Başarılı!",
-            html: "@Html.Raw(DecodeHtmlCharacters(x.Replace("-", "</br>")))",
-            icon: "success"
-        });
-    </script>
+	var x = TempData["userResponseSuccess"].ToString();
+	<script>
+		Swal.fire({
+			title: "Başarılı!",
+			html: "@Html.Raw(DecodeHtmlCharacters(x.Replace("-", "</br>")))",
+			icon: "success"
+		});
+	</script>
 }
 @if (TempData["userResponseError"] != null)
 {
-    var x = TempData["userResponseError"].ToString();
-    <script>
-        Swal.fire({
-            title: "Hata!",
-            html: "@Html.Raw(DecodeHtmlCharacters(x.Replace("-", "</br>")))",
-            icon: "error"
-        });
-    </script>
+	var x = TempData["userResponseError"].ToString();
+	<script>
+		Swal.fire({
+			title: "Hata!",
+			html: "@Html.Raw(DecodeHtmlCharacters(x.Replace("-", "</br>")))",
+			icon: "error"
+		});
+	</script>
 }
 
 <script>
-    function toggleCheckbox(checkboxId) {
-        var checkbox = document.getElementById(checkboxId);
+	function toggleCheckbox(checkboxId) {
+		var checkbox = document.getElementById(checkboxId);
 
-        // Checkbox'ın mevcut durumunu tersine çevir (seçiliyse kaldır, seçili değilse seç)
-        checkbox.checked = !checkbox.checked;
+		// Checkbox'ın mevcut durumunu tersine çevir (seçiliyse kaldır, seçili değilse seç)
+		checkbox.checked = !checkbox.checked;
 
-        // Checkbox seçildiyse arka plan rengini güncelle
-        checkbox.parentElement.parentElement.style.backgroundColor = checkbox.checked ? '#e0f7ff' : '#f9f9f9';
-    }
-    function updateUserModal(id, name, lastName, email, password, image, userRoles) {
-        if (typeof userRoles === 'string') {
-            userRoles = userRoles.split(','); // userRoles'i virgüllerle ayırıp bir diziye dönüştür
-        }
+		// Checkbox seçildiyse arka plan rengini güncelle
+		checkbox.parentElement.parentElement.style.backgroundColor = checkbox.checked ? '#e0f7ff' : '#f9f9f9';
+	}
 
-        // Tüm checkbox'ları temizleyelim (seçili durumlarını kaldıralım)
-        $('input[name="UserRoles[]"]').prop('checked', false);
+	function updateUserModal(id, guid, name, lastName, email, password, image, userRoles) {
+		if (typeof userRoles === 'string') {
+			userRoles = userRoles.split(','); // userRoles'i virgüllerle ayırıp bir diziye dönüştür
+		}
 
-        // Gelen userRoles içindeki ID'lere göre checkbox'ları seçili yap
-        userRoles.forEach(function (roleId) {
-            roleId = roleId.trim(); // Boşluk varsa temizleyelim
-            // roleId ile eşleşen checkbox'ı seçili hale getir
-            $('#role_' + roleId).prop('checked', true);
+		// Tüm checkbox'ları temizleyelim (seçili durumlarını kaldıralım)
+		$('input[name="UserRoles[]"]').prop('checked', false);
 
-            // Arka plan rengini de güncelle
-            $('#role_' + roleId).closest('.role-checkbox').css('background-color', '#e0f7ff');
-        });
-        $('#modal-updateUserModal').show();
-        $('#updateUserId').val(id);
-        $('#txtUserName_Update').val(name);
-        $('#txtUserLastName_Update').val(lastName);
-        $('#txtUserEmail_Update').val(email);
-        $('#txtUserPassword_Update').val(password);
-        $('#txtUserImage_Update').val(image);
-        $('#txtUserRoles_Update').val(userRoles);
+		// Gelen userRoles içindeki ID'lere göre checkbox'ları seçili yap
+		userRoles.forEach(function (roleId) {
+			roleId = roleId.trim(); // Boşluk varsa temizleyelim
+			// roleId ile eşleşen checkbox'ı seçili hale getir
+			$('#role_' + roleId).prop('checked', true);
 
-    }
+			// Arka plan rengini de güncelle
+			$('#role_' + roleId).closest('.role-checkbox').css('background-color', '#e0f7ff');
+		});
+		$('#modal-updateUserModal').show();
+		$('#updateUserId').val(id);
+		$('#updateUserGuid').val(guid);
+		$('#txtUserName_Update').val(name);
+		$('#txtUserLastName_Update').val(lastName);
+		$('#txtUserEmail_Update').val(email);
+		$('#txtUserImage_Update').val(image);
+		$('#txtUserRoles_Update').val(userRoles);
 
-    // user güncelleme i butonu
-    document.querySelector('.info-icon').addEventListener('mouseenter', function () {
-        this.querySelector('.tooltip-text').style.visibility = 'visible';
-        this.querySelector('.tooltip-text').style.opacity = '1';
-    });
+	}
 
-    document.querySelector('.info-icon').addEventListener('mouseleave', function () {
-        this.querySelector('.tooltip-text').style.visibility = 'hidden';
-        this.querySelector('.tooltip-text').style.opacity = '0';
-    });
+	function updateUserPasswordModal(id,password) {
+
+		$('#modal-updateUserPasswordModal').show();
+		$('#updateUserPasswordId').val(id);
+
+	}
+
+	// user güncelleme i butonu
+	document.querySelector('.info-icon').addEventListener('mouseenter', function () {
+		this.querySelector('.tooltip-text').style.visibility = 'visible';
+		this.querySelector('.tooltip-text').style.opacity = '1';
+	});
+
+	document.querySelector('.info-icon').addEventListener('mouseleave', function () {
+		this.querySelector('.tooltip-text').style.visibility = 'hidden';
+		this.querySelector('.tooltip-text').style.opacity = '0';
+	});
 </script>

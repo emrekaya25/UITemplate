@@ -5,6 +5,7 @@ using System.Net;
 using UITemplate.Model.DTO.Login;
 using UITemplate.Model.DTO.UserRole;
 using UITemplate.Model.Result;
+using UITemplate.UI.Controllers;
 using UITemplate.UI.Services;
 
 namespace UITemplate.UI.Areas.Admin.Controllers
@@ -13,13 +14,15 @@ namespace UITemplate.UI.Areas.Admin.Controllers
     public class LoginController : Controller
     {
         private readonly BaseService<LoginDTO> _loginService;
+        private readonly SessionHelper _sessionHelper;
 
-        public LoginController(BaseService<LoginDTO> loginService)
-        {
-            _loginService = loginService;
-        }
+		public LoginController(BaseService<LoginDTO> loginService, SessionHelper sessionHelper)
+		{
+			_loginService = loginService;
+			_sessionHelper = sessionHelper;
+		}
 
-        [HttpGet("/admin/login")]
+		[HttpGet("/admin/login")]
         public async Task<IActionResult> Index()
         {
             return View();
@@ -40,13 +43,7 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 
 			if (responseObject.StatusCode == (int)HttpStatusCode.OK)
             {
-                HttpContext.Session.SetString("Id",responseObject.Data.Id.ToString());
-                HttpContext.Session.SetString("Guid",responseObject.Data.Guid.ToString());
-                HttpContext.Session.SetString("Token", responseObject.Data.Token);
-                HttpContext.Session.SetString("Name", responseObject.Data.Name + " " + responseObject.Data.LastName);
-                HttpContext.Session.SetString("Email",responseObject.Data.Email);
-                HttpContext.Session.SetString("Image", responseObject.Data.Image);
-                HttpContext.Session.SetString("Roles", JsonConvert.SerializeObject(responseObject.Data.Roles));
+                _sessionHelper.SetUser(responseObject.Data);
 
                 var roleNames = JsonConvert.DeserializeObject<List<UserRoleDTO>>(HttpContext.Session.GetString("Roles"));
                 var roles = string.Join(",", roleNames.Select(x=>x.RoleName));
@@ -57,7 +54,7 @@ namespace UITemplate.UI.Areas.Admin.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("GetUser","User", new { userId = responseObject.Data.Id });
+                    return RedirectToAction("GetUser","User", new { userGuid = responseObject.Data.Guid });
                 }
                 
             }

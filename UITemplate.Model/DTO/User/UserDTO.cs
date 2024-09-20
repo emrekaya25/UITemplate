@@ -21,5 +21,8 @@ namespace UITemplate.Model.DTO.User
 		public string Password { get; set; } = "string";
 		public string Image { get; set; } = "string";
 		public List<UserRoleDTO> UserRoles { get; set; } = new();
-	}
+
+
+		public string? ConfirmPassword { get; set; } = "string";
+    }
 }

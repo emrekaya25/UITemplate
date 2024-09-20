@@ -5,6 +5,7 @@ using UITemplate.Model.DTO.Role;
 using UITemplate.Model.DTO.User;
 using UITemplate.Model.DTO.UserRole;
 using UITemplate.UI.Areas.Admin.Models;
+using UITemplate.UI.Controllers;
 using UITemplate.UI.Services;
 
 namespace UITemplate.UI.Areas.Admin.Controllers
@@ -15,12 +16,14 @@ namespace UITemplate.UI.Areas.Admin.Controllers
 		private readonly BaseService<UserDTO> _userService;
 		private readonly BaseService<RoleDTO> _roleService;
 		private readonly BaseService<UserRoleDTO> _userRoleService;
+		private readonly SessionHelper _sessionHelper;
 
-		public UserController(BaseService<UserDTO> userService, BaseService<UserRoleDTO> userRoleService, BaseService<RoleDTO> roleService)
+		public UserController(BaseService<UserDTO> userService, BaseService<UserRoleDTO> userRoleService, BaseService<RoleDTO> roleService, SessionHelper sessionHelper)
 		{
 			_userService = userService;
 			_userRoleService = userRoleService;
 			_roleService = roleService;
+			_sessionHelper = sessionHelper;
 		}
 
 		[HttpGet("/admin/users")]
@@ -176,9 +179,42 @@ namespace UITemplate.UI.Areas.Admin.Controllers
             else
             {
                 TempData["userResponseSuccess"] = $"{responseObject.Message}";
-            }
+				if (responseObject.Data.Id == Convert.ToInt32(HttpContext.Session.GetString("Id")))
+				{
+					UserDTO user = responseObject.Data;
+					_sessionHelper.UpdateUser(user);
+				}
+			}
 
 			return RedirectToAction("GetUser","User", new { userGuid = responseObject.Data.Guid });
+		}
+
+		[HttpPost("/admin/resetPassword")]
+		public async Task<IActionResult> ResetPassword(UserDTO userDTO)
+		{
+			var responseObject = await _userService.PostAsync("ResetPassword",userDTO,true);
+
+			if (responseObject.ErrorInformation != null)
+			{
+				var errorList = new List<string>();
+
+				JArray errors = (JArray)responseObject.ErrorInformation.Error;
+				foreach (var error in errors)
+				{
+					errorList.Add(error.ToString());
+				}
+
+				string errorMessages = string.Join(", ", errorList);
+
+				TempData["userResponseError"] = $"{errorMessages}";
+
+			}
+			else
+			{
+				TempData["userResponseSuccess"] = $"{responseObject.Message}";
+			}
+
+			return RedirectToAction("GetUser", "User", new { userGuid = responseObject.Data.Guid });
 		}
 
 		
